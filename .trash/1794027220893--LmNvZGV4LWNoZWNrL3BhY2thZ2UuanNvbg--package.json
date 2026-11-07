@@ -1,0 +1,51 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "clean:next": "powershell -NoProfile -Command \"if (Test-Path .next) { Remove-Item .next -Recurse -Force -ErrorAction SilentlyContinue }\"",
+    "clean:out": "powershell -NoProfile -Command \"if (Test-Path out) { Remove-Item out -Recurse -Force -ErrorAction SilentlyContinue }\"",
+    "sync:out:todolist": "powershell -NoProfile -Command \"if (Test-Path out-todolist) { Remove-Item out-todolist -Recurse -Force -ErrorAction SilentlyContinue }; Copy-Item out out-todolist -Recurse; if (Test-Path out-todolist\\todo\\index.html) { Copy-Item out-todolist\\todo\\index.html out-todolist\\index.html -Force }\"",
+    "build:clean": "npm run clean:next && npm run build",
+    "build:lifeplan": "powershell -NoProfile -Command \"$env:NEXT_PUBLIC_APP_MODE='lifeplan'; npm run build:clean\"",
+    "deploy:main": "npm run build:clean && firebase deploy --only hosting:main",
+    "deploy:lifeplan": "npm run build:lifeplan && firebase deploy --project lifeplan --only hosting:lifeplan",
+    "deploy:lifeplan:rules": "firebase deploy --project lifeplan --only firestore:rules",
+    "deploy:words": "npm run build:clean && firebase deploy --only hosting:words",
+    "deploy:todolist": "npm run build:clean && npm run sync:out:todolist && firebase deploy --only hosting:todolist",
+    "worker:walter": "node scripts/walter-worker.mjs"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
+    "@supabase/supabase-js": "^2.98.0",
+    "@tailwindcss/typography": "^0.5.19",
+    "firebase": "^12.5.0",
+    "firebase-admin": "^13.7.0",
+    "gray-matter": "^4.0.3",
+    "next": "^14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-markdown": "^10.1.0",
+    "solarlunar": "^3.1.0",
+    "tailwindcss": "^3.4.18",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^16.0.1",
+    "postcss": "^8.5.6",
+    "typescript": "^5.9.3"
+  }
+}
